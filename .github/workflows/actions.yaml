@@ -1,8 +1,19 @@
 name: my-github-template
 
 on:
-  # pull_request
-  push
+
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+    paths-ignore:
+      - README.md
+
+  push:
+    branches:
+      - main
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +38,7 @@ jobs:
         with:
           node-version: 20
       - name: Install
-        run: npm install
+        run: npm ci
       - name: Run
         run: npm run
       - name: Curl
