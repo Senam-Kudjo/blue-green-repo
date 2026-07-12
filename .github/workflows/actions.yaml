@@ -23,5 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: job-1
     steps:
-      - name: echo
-        run: echo hahaha
+      - name: Run
+        run: npm run
+      - name: Curl
+        run: curl localhost:3000
