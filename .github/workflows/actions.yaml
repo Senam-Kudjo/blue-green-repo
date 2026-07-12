@@ -23,6 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: job-1
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install
       - name: Run
         run: npm run
       - name: Curl
