@@ -24,4 +24,4 @@ jobs:
     needs: job-1
     steps:
       - name: echo
-        runs: echo hahaha
+        run: echo hahaha
