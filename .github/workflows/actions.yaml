@@ -41,8 +41,11 @@ jobs:
         run: npm install
       - name: test coverage
         continue-on-error: true
+        id: install
         run: npm run coverage
       - name: Build
+        if: always()
+        # if: failure() && (steps.install.outcome == 'failure' || steps.install.outcome == 'success')
         run: npm run build
 
   artifact:
