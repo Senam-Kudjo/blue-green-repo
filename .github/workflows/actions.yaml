@@ -1,0 +1,84 @@
+name: my-github-template
+ 
+on:
+
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+    paths-ignore:
+      - README.md
+
+  push:
+    branches:
+      - main
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # if: github.ref == 'refs/heads/main'
+  # timeout-minutes: 10
+
+  checkout:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+
+  build:
+    runs-on: ubuntu-latest
+    needs: checkout
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+
+  artifact:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3.1.0
+        with:
+          name: download artifact
+
+  acr-image-docker:
+    runs-on: ubuntu-latest
+    needs: artifact
+    steps:
+      - name: Azure Container Registry Build
+        uses: Azure/acr-build@v1
+        with:
+          # Service Principal with Contributor role on the ACR
+          service_principal: 
+          # Service Principal password
+          service_principal_password: 
+          # Azure Container Registry tenant
+          tenant: 
+          # The name of the ACR, minus the .azurecr.io
+          registry: 
+          # Repository to use
+          repository: 
+          # Github access token for private repositories
+          git_access_token: 
+          # Docker image name
+          image: # optional
+          # Docker image tag, default to the commit SHA
+          tag: # optional
+          # Branch to build from, defaults to master
+          branch: # optional
+          # The folder in the Github repo that holds the source
+          folder: 
+          # The location of the Dockerfile; defaults to ./Dockerfile
+          dockerfile: # optional
+          # JSON specifying key=value pairs as as Docker build arguments
+          build_args: # optional 
