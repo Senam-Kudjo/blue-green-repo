@@ -39,6 +39,9 @@ jobs:
           node-version: 20
       - name: Install
         run: npm install
+      - name: test coverage
+        continue-on-error: true
+        run: npm run coverage
       - name: Build
         run: npm run build
 
